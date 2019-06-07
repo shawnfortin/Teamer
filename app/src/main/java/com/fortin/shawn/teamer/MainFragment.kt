@@ -20,6 +20,7 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater!!.inflate(R.layout.fragment_main, container, false)
         recyclerView = view.findViewById(R.id.namesRecyclerView)
+        recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(activity.applicationContext)
         recyclerView.adapter = NamesAdapter(players)
 

@@ -35,6 +35,7 @@
         val view = inflater!!.inflate(R.layout.fragment_teams, container, false)
 
         recycler = view.findViewById(R.id.teams)
+        recycler.setHasFixedSize(true)
         recycler.layoutManager = LinearLayoutManager(activity)
         recycler.adapter = TeamAdapter(players)
 
