@@ -15,9 +15,8 @@
     var players = ArrayList<Player>()
     private lateinit var recycler: RecyclerView
 
-    fun initializePlayers(names: ArrayList<String>) {
+    fun initializePlayers(names: ArrayList<String>, teams: Int) {
         // create players arraylist from names provided
-        val teams = 4
         var curTeam = 1
         val rand = Random()
         while (names.size > 0) {

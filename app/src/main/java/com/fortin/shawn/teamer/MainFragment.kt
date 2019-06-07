@@ -23,22 +23,6 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
         recyclerView.layoutManager = LinearLayoutManager(activity.applicationContext)
         recyclerView.adapter = NamesAdapter(players)
 
-        val addButton = view.findViewById<Button>(R.id.addButton)
-        addButton.setOnClickListener{
-            // create a dialog allowing the user to enter a name
-            val addNameDialog = AddNameDialogFragment()
-            addNameDialog.setTarget(this)
-            addNameDialog.show(fragmentManager, "add")
-        }
-
-        val createButton = view.findViewById<Button>(R.id.create)
-        createButton.setOnClickListener {
-            val intent = Intent(activity, TeamsActivity::class.java).apply {
-                putStringArrayListExtra("Players", players)
-            }
-            startActivity(intent)
-        }
-
         val teamsCount = view.findViewById<TextView>(R.id.teamsCount)
 
         val teamsSlider = view.findViewById<SeekBar>(R.id.teamsSlider)
@@ -58,6 +42,23 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
         }
 
         teamsSlider.setOnSeekBarChangeListener(SeekListener())
+
+        val addButton = view.findViewById<Button>(R.id.addButton)
+        addButton.setOnClickListener{
+            // create a dialog allowing the user to enter a name
+            val addNameDialog = AddNameDialogFragment()
+            addNameDialog.setTarget(this)
+            addNameDialog.show(fragmentManager, "add")
+        }
+
+        val createButton = view.findViewById<Button>(R.id.create)
+        createButton.setOnClickListener {
+            val intent = Intent(activity, TeamsActivity::class.java).apply {
+                putStringArrayListExtra("Players", players)
+                putExtra("Teams", teamsCount.text.toString().toInt())
+            }
+            startActivity(intent)
+        }
 
         return view
     }
