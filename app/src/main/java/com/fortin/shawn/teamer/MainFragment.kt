@@ -1,6 +1,7 @@
 package com.fortin.shawn.teamer
 
 import android.app.Fragment
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -27,6 +28,15 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
             addNameDialog.setTarget(this)
             addNameDialog.show(fragmentManager, "add")
         }
+
+        val createButton = view.findViewById<Button>(R.id.create)
+        createButton.setOnClickListener {
+            val intent = Intent(activity, TeamsActivity::class.java).apply {
+                putStringArrayListExtra("Players", players)
+            }
+            startActivity(intent)
+        }
+
         return view
     }
 

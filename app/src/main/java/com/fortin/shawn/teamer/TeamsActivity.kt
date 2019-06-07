@@ -7,5 +7,8 @@ class TeamsActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teams)
+        val players = intent.getStringArrayListExtra("Players")
+        val tFrag = fragmentManager.findFragmentById(R.id.teams_fragment) as TeamsFragment
+        tFrag.initializePlayers(players)
     }
 }
