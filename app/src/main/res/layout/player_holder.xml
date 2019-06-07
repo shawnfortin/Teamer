@@ -6,9 +6,10 @@
     android:id="@+id/root">
 
     <TextView
+        android:id="@+id/team_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/team_name"/>
+        android:textSize="24sp" />
 
     <TextView
         android:layout_width="match_parent"
