@@ -1,17 +1,17 @@
-package com.fortin.shawn.teamer
+    package com.fortin.shawn.teamer
 
-import android.app.Fragment
-import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import kotlinx.android.synthetic.main.player_holder.view.*
-import java.lang.Integer.MAX_VALUE
-import java.util.*
+    import android.app.Fragment
+    import android.os.Bundle
+    import android.support.v7.widget.LinearLayoutManager
+    import android.support.v7.widget.RecyclerView
+    import android.view.LayoutInflater
+    import android.view.View
+    import android.view.ViewGroup
+    import kotlinx.android.synthetic.main.player_holder.view.*
+    import java.lang.Integer.MAX_VALUE
+    import java.util.*
 
-class TeamsFragment: Fragment() {
+    class TeamsFragment: Fragment() {
     var players = ArrayList<Player>()
     private lateinit var recycler: RecyclerView
 
@@ -20,7 +20,7 @@ class TeamsFragment: Fragment() {
         val teams = 4
         var curTeam = 1
         val rand = Random()
-        while(names.size > 0) {
+        while (names.size > 0) {
             val player = names.get(rand.nextInt(names.size))
             names.remove(player)
             players.add(Player(player, curTeam))
@@ -63,8 +63,8 @@ class TeamsFragment: Fragment() {
         return players
     }
 
-    class TeamAdapter(private val dataset: ArrayList<Player>): RecyclerView.Adapter<TeamAdapter.PlayerHolder>() {
-        class PlayerHolder(val view: View): RecyclerView.ViewHolder(view)
+    class TeamAdapter(private val dataset: ArrayList<Player>) : RecyclerView.Adapter<TeamAdapter.PlayerHolder>() {
+        class PlayerHolder(val view: View) : RecyclerView.ViewHolder(view)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerHolder {
             return PlayerHolder(LayoutInflater.from(parent.context).inflate(R.layout.player_holder, parent, false))
@@ -76,9 +76,7 @@ class TeamsFragment: Fragment() {
             holder.view.player.text = dataset[position].name
 
             if (position > 0 && dataset[position - 1].team == dataset[position].team) {
-                holder.view.team_name.visibility = View.INVISIBLE
-            } else {
-                holder.view.team_name.visibility = View.VISIBLE
+                holder.view.root.removeView(holder.view.team_name)
             }
         }
 
