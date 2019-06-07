@@ -4,4 +4,5 @@
     <string name="add_name">Add a Name</string>
     <string name="cancel">Cancel</string>
     <string name="john">John</string>
+    <string name="create_teams">Create Teams</string>
 </resources>

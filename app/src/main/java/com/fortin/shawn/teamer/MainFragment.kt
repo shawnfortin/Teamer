@@ -16,19 +16,21 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater!!.inflate(R.layout.fragment_main, container, false)
-        recyclerView = view.findViewById<RecyclerView>(R.id.namesRecyclerView)
+        recyclerView = view.findViewById(R.id.namesRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(activity.applicationContext)
         recyclerView.adapter = NamesAdapter(players)
 
         val addButton = view.findViewById<Button>(R.id.addButton)
-        addButton.setOnClickListener({
+        addButton.setOnClickListener{
+            // create a dialog allowing the user to enter a name
             val addNameDialog = AddNameDialogFragment()
             addNameDialog.setTarget(this)
             addNameDialog.show(fragmentManager, "add")
-        })
+        }
         return view
     }
 
+    // from AddNameDialogFragment.AddNamesListener interface
     override fun onPositiveClicked(dialog: AddNameDialogFragment, name: String) {
         addToPlayers(name)
     }
@@ -38,6 +40,7 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
         recyclerView.adapter.notifyDataSetChanged()
     }
 
+    // Adapter class for RecyclerView
     class NamesAdapter(private val dataset: ArrayList<String>) : RecyclerView.Adapter<NamesAdapter.NamesHolder>() {
         class NamesHolder(val view: View) : RecyclerView.ViewHolder(view)
 
