@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.SeekBar
+import android.widget.TextView
 import kotlinx.android.synthetic.main.names_holder.view.*
 
 class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
@@ -36,6 +38,26 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
             }
             startActivity(intent)
         }
+
+        val teamsCount = view.findViewById<TextView>(R.id.teamsCount)
+
+        val teamsSlider = view.findViewById<SeekBar>(R.id.teamsSlider)
+
+        class SeekListener: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                teamsCount.text = "${p1 + 2}"
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+                /* do nothing */
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+                /* do nothing */
+            }
+        }
+
+        teamsSlider.setOnSeekBarChangeListener(SeekListener())
 
         return view
     }

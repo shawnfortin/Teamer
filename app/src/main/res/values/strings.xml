@@ -5,4 +5,5 @@
     <string name="cancel">Cancel</string>
     <string name="john">John</string>
     <string name="create_teams">Create Teams</string>
+    <string name="teams">Teams:</string>
 </resources>
