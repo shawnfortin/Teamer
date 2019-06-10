@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
@@ -17,11 +15,14 @@ import kotlinx.android.synthetic.main.names_holder.view.*
 class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
     private var players = ArrayList<String>()
     private lateinit var recyclerView: RecyclerView
+    private lateinit var teamsCount: TextView
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         if (savedInstanceState != null) {
             players = savedInstanceState.getStringArrayList("Players")
         }
+
+        setHasOptionsMenu(true)
 
         val view = inflater!!.inflate(R.layout.fragment_main, container, false)
         recyclerView = view.findViewById(R.id.namesRecyclerView)
@@ -29,7 +30,7 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
         recyclerView.layoutManager = LinearLayoutManager(activity.applicationContext)
         recyclerView.adapter = NamesAdapter(players)
 
-        val teamsCount = view.findViewById<TextView>(R.id.teamsCount)
+        teamsCount = view.findViewById(R.id.teamsCount)
 
         val teamsSlider = view.findViewById<SeekBar>(R.id.teamsSlider)
 
@@ -57,16 +58,31 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
             addNameDialog.show(fragmentManager, "add")
         }
 
-        val createButton = view.findViewById<Button>(R.id.create)
-        createButton.setOnClickListener {
-            val intent = Intent(activity, TeamsActivity::class.java).apply {
-                putStringArrayListExtra("Players", players)
-                putExtra("Teams", teamsCount.text.toString().toInt())
-            }
-            startActivity(intent)
-        }
-
         return view
+    }
+
+    fun createTeams() {
+        val intent = Intent(activity, TeamsActivity::class.java).apply {
+            putStringArrayListExtra("Players", players)
+            putExtra("Teams", teamsCount.text.toString().toInt())
+        }
+        startActivity(intent)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when(item?.itemId) {
+            R.id.createTeams -> {
+                createTeams()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
