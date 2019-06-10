@@ -3,6 +3,7 @@ package com.fortin.shawn.teamer
 import android.app.Fragment
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -48,7 +49,7 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
 
         teamsSlider.setOnSeekBarChangeListener(SeekListener())
 
-        val addButton = view.findViewById<Button>(R.id.addButton)
+        val addButton = view.findViewById<FloatingActionButton>(R.id.addButton)
         addButton.setOnClickListener{
             // create a dialog allowing the user to enter a name
             val addNameDialog = AddNameDialogFragment()

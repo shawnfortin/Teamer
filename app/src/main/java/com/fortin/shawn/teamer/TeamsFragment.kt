@@ -1,6 +1,7 @@
     package com.fortin.shawn.teamer
 
     import android.app.Fragment
+    import android.os.AsyncTask
     import android.os.Bundle
     import android.os.Parcel
     import android.os.Parcelable
@@ -49,10 +50,10 @@
         return view
     }
 
-        override fun onSaveInstanceState(outState: Bundle?) {
-            super.onSaveInstanceState(outState)
-            outState?.putParcelableArrayList("Teams", players)
-        }
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putParcelableArrayList("Teams", players)
+    }
 
     class Player(var name: String, var team: Int) : Parcelable{
         private constructor(parcel: Parcel) : this(
@@ -84,7 +85,7 @@
         // selection sorts the list of players based on team
         for (x in 0 until players.size) {
             var min = MAX_VALUE
-            var minIndex = 0
+            var minIndex = x
             for (i in x until players.size) {
                 if (players[i].team < min) {
                     min = players[i].team
