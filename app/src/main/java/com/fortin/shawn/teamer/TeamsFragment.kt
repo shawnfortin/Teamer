@@ -113,6 +113,7 @@
             holder.view.player.text = dataset[position].name
 
             if (position > 0 && dataset[position - 1].team == dataset[position].team) {
+                holder.view.root.removeView(holder.view.divider)
                 holder.view.root.removeView(holder.view.team_name)
             }
         }
