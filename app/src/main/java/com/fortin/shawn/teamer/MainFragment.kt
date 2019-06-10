@@ -18,6 +18,10 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        if (savedInstanceState != null) {
+            players = savedInstanceState.getStringArrayList("Players")
+        }
+
         val view = inflater!!.inflate(R.layout.fragment_main, container, false)
         recyclerView = view.findViewById(R.id.namesRecyclerView)
         recyclerView.setHasFixedSize(true)
@@ -62,6 +66,11 @@ class MainFragment : Fragment(), AddNameDialogFragment.AddNamesListener {
         }
 
         return view
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putStringArrayList("Players", players)
     }
 
     // from AddNameDialogFragment.AddNamesListener interface

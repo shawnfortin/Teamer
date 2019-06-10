@@ -2,11 +2,14 @@
 
     import android.app.Fragment
     import android.os.Bundle
+    import android.os.Parcel
+    import android.os.Parcelable
     import android.support.v7.widget.LinearLayoutManager
     import android.support.v7.widget.RecyclerView
     import android.view.LayoutInflater
     import android.view.View
     import android.view.ViewGroup
+    import kotlinx.android.synthetic.main.player_holder.*
     import kotlinx.android.synthetic.main.player_holder.view.*
     import java.lang.Integer.MAX_VALUE
     import java.util.*
@@ -32,6 +35,10 @@
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        if (savedInstanceState != null) {
+            players = savedInstanceState.getParcelableArrayList("Teams")
+        }
+
         val view = inflater!!.inflate(R.layout.fragment_teams, container, false)
 
         recycler = view.findViewById(R.id.teams)
@@ -42,7 +49,36 @@
         return view
     }
 
-    class Player(val name: String, val team: Int)
+        override fun onSaveInstanceState(outState: Bundle?) {
+            super.onSaveInstanceState(outState)
+            outState?.putParcelableArrayList("Teams", players)
+        }
+
+    class Player(var name: String, var team: Int) : Parcelable{
+        private constructor(parcel: Parcel) : this(
+            name = parcel.readString(),
+            team = parcel.readInt()
+        )
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeString(name)
+            parcel.writeInt(team)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<Player> {
+            override fun createFromParcel(parcel: Parcel): Player {
+                return Player(parcel)
+            }
+
+            override fun newArray(size: Int): Array<Player?> {
+                return arrayOfNulls(size)
+            }
+        }
+    }
 
     private fun sortPlayers(players: ArrayList<Player>): ArrayList<Player> {
         // selection sorts the list of players based on team
