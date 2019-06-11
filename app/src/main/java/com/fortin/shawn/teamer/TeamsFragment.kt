@@ -12,7 +12,7 @@
     import java.util.*
 
     class TeamsFragment: Fragment() {
-    var teams = ArrayList<ArrayList<Player>>()
+    var teams = ArrayList<ArrayList<String>>()
     private lateinit var recycler: RecyclerView
     private var numTeams = 0
 
@@ -25,9 +25,9 @@
             val player = names.get(rand.nextInt(names.size))
             names.remove(player)
             if (teams.size < curTeam + 1) {
-                teams.add(curTeam, ArrayList<Player>())
+                teams.add(curTeam, ArrayList<String>())
             }
-            this.teams[curTeam].add(Player(player, curTeam))
+            this.teams[curTeam].add(player)
             curTeam += 1
             if (curTeam >= numTeams)
                 curTeam = 0
@@ -91,33 +91,7 @@
 //        outState?.putParcelableArrayList("Teams", teams)
     }
 
-    class Player(var name: String, var team: Int) : Parcelable{
-        private constructor(parcel: Parcel) : this(
-            name = parcel.readString(),
-            team = parcel.readInt()
-        )
-
-        override fun writeToParcel(parcel: Parcel, flags: Int) {
-            parcel.writeString(name)
-            parcel.writeInt(team)
-        }
-
-        override fun describeContents(): Int {
-            return 0
-        }
-
-        companion object CREATOR : Parcelable.Creator<Player> {
-            override fun createFromParcel(parcel: Parcel): Player {
-                return Player(parcel)
-            }
-
-            override fun newArray(size: Int): Array<Player?> {
-                return arrayOfNulls(size)
-            }
-        }
-    }
-
-    class TeamAdapter(private val dataset: ArrayList<ArrayList<Player>>) : RecyclerView.Adapter<TeamAdapter.PlayerHolder>() {
+    class TeamAdapter(private val dataset: ArrayList<ArrayList<String>>) : RecyclerView.Adapter<TeamAdapter.PlayerHolder>() {
         class PlayerHolder(val view: View) : RecyclerView.ViewHolder(view)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerHolder {
@@ -129,7 +103,7 @@
             holder.view.team_name.text = "Team ${position + 1}"
             var players = ""
             for (player in dataset[position])
-                players += "\n${player.name}"
+                players += "\n$player"
 
             holder.view.player.text = players.trim()
         }
