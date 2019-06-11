@@ -55,7 +55,7 @@
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         if (savedInstanceState != null) {
-//            teams = savedInstanceState.getParcelableArrayList("Teams")
+            teams = savedInstanceState.getSerializable("Teams") as ArrayList<ArrayList<String>>
         }
 
         setHasOptionsMenu(true)
@@ -88,7 +88,7 @@
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-//        outState?.putParcelableArrayList("Teams", teams)
+        outState?.putSerializable("Teams", teams)
     }
 
     class TeamAdapter(private val dataset: ArrayList<ArrayList<String>>) : RecyclerView.Adapter<TeamAdapter.PlayerHolder>() {
