@@ -1,58 +1,94 @@
     package com.fortin.shawn.teamer
 
     import android.app.Fragment
-    import android.os.AsyncTask
     import android.os.Bundle
     import android.os.Parcel
     import android.os.Parcelable
     import android.support.v7.widget.LinearLayoutManager
     import android.support.v7.widget.RecyclerView
-    import android.view.LayoutInflater
-    import android.view.View
-    import android.view.ViewGroup
-    import kotlinx.android.synthetic.main.player_holder.*
+    import android.view.*
     import kotlinx.android.synthetic.main.player_holder.view.*
     import java.lang.Integer.MAX_VALUE
     import java.util.*
 
     class TeamsFragment: Fragment() {
-    var players = ArrayList<Player>()
+    var teams = ArrayList<ArrayList<Player>>()
     private lateinit var recycler: RecyclerView
+    private var numTeams = 0
 
-    fun initializePlayers(names: ArrayList<String>, teams: Int) {
-        // create players arraylist from names provided
-        var curTeam = 1
+    fun createTeams(names: ArrayList<String>, numTeams: Int) {
+        // create numTeams arraylist from names provided
+        this.numTeams = numTeams
+        var curTeam = 0
         val rand = Random()
         while (names.size > 0) {
             val player = names.get(rand.nextInt(names.size))
             names.remove(player)
-            players.add(Player(player, curTeam))
+            if (teams.size < curTeam + 1) {
+                teams.add(curTeam, ArrayList<Player>())
+            }
+            this.teams[curTeam].add(Player(player, curTeam))
             curTeam += 1
-            if (curTeam > teams)
-                curTeam = 1
+            if (curTeam >= numTeams)
+                curTeam = 0
         }
-        sortPlayers(players)
         recycler.adapter.notifyDataSetChanged()
     }
 
+//    private fun newTeams() {
+//        var newPlayers = ArrayList<Player>()
+//        var curTeam = 1
+//        val rand = Random()
+//        while (teams.size > 0) {
+//            val player = teams.get(rand.nextInt(teams.size))
+//            teams.remove(player)
+//            player.team = curTeam
+//            newPlayers.add(player)
+//            curTeam += 1
+//            if (curTeam > numTeams)
+//                curTeam = 1
+//        }
+//        teams = newPlayers
+//        sortPlayers(teams)
+//        recycler.adapter.notifyDataSetChanged()
+//    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         if (savedInstanceState != null) {
-            players = savedInstanceState.getParcelableArrayList("Teams")
+//            teams = savedInstanceState.getParcelableArrayList("Teams")
         }
+
+        setHasOptionsMenu(true)
 
         val view = inflater!!.inflate(R.layout.fragment_teams, container, false)
 
         recycler = view.findViewById(R.id.teams)
         recycler.setHasFixedSize(true)
         recycler.layoutManager = LinearLayoutManager(activity)
-        recycler.adapter = TeamAdapter(players)
+        recycler.adapter = TeamAdapter(teams)
 
         return view
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_teams, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when(item?.itemId) {
+            R.id.shuffle -> {
+                teams.shuffle()
+                recycler.adapter.notifyDataSetChanged()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putParcelableArrayList("Teams", players)
+//        outState?.putParcelableArrayList("Teams", teams)
     }
 
     class Player(var name: String, var team: Int) : Parcelable{
@@ -81,26 +117,7 @@
         }
     }
 
-    private fun sortPlayers(players: ArrayList<Player>): ArrayList<Player> {
-        // selection sorts the list of players based on team
-        for (x in 0 until players.size) {
-            var min = MAX_VALUE
-            var minIndex = x
-            for (i in x until players.size) {
-                if (players[i].team < min) {
-                    min = players[i].team
-                    minIndex = i
-                }
-            }
-            // swap position x with position minIndex
-            val tmp = players[x]
-            players[x] = players[minIndex]
-            players[minIndex] = tmp
-        }
-        return players
-    }
-
-    class TeamAdapter(private val dataset: ArrayList<Player>) : RecyclerView.Adapter<TeamAdapter.PlayerHolder>() {
+    class TeamAdapter(private val dataset: ArrayList<ArrayList<Player>>) : RecyclerView.Adapter<TeamAdapter.PlayerHolder>() {
         class PlayerHolder(val view: View) : RecyclerView.ViewHolder(view)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerHolder {
@@ -109,13 +126,12 @@
 
         override fun onBindViewHolder(holder: PlayerHolder, position: Int) {
             // dataset must be sorted by team for display to work properly
-            holder.view.team_name.text = "Team ${dataset[position].team}"
-            holder.view.player.text = dataset[position].name
+            holder.view.team_name.text = "Team ${position + 1}"
+            var players = ""
+            for (player in dataset[position])
+                players += "\n${player.name}"
 
-            if (position > 0 && dataset[position - 1].team == dataset[position].team) {
-                holder.view.root.removeView(holder.view.divider)
-                holder.view.root.removeView(holder.view.team_name)
-            }
+            holder.view.player.text = players.trim()
         }
 
         override fun getItemCount(): Int {

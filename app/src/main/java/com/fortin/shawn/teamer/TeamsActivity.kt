@@ -10,6 +10,6 @@ class TeamsActivity: AppCompatActivity() {
         val players = intent.getStringArrayListExtra("Players")
         val teams = intent.getIntExtra("Teams", 4)
         val tFrag = fragmentManager.findFragmentById(R.id.teams_fragment) as TeamsFragment
-        tFrag.initializePlayers(players, teams)
+        tFrag.createTeams(players, teams)
     }
 }
