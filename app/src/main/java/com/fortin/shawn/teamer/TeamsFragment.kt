@@ -14,20 +14,22 @@
     class TeamsFragment: Fragment() {
     var teams = ArrayList<ArrayList<String>>()
     private lateinit var recycler: RecyclerView
-    private var numTeams = 0
+    var numTeams = 0
+    lateinit var names: ArrayList<String>
 
-    fun createTeams(names: ArrayList<String>, numTeams: Int) {
+    fun createTeams() {
         // create numTeams arraylist from names provided
-        this.numTeams = numTeams
         var curTeam = 0
         val rand = Random()
-        while (names.size > 0) {
-            val player = names.get(rand.nextInt(names.size))
-            names.remove(player)
+        var tempNames = ArrayList<String>()
+        tempNames.addAll(names)
+        while (tempNames.size > 0) {
+            val player = tempNames.get(rand.nextInt(tempNames.size))
+            tempNames.remove(player)
             if (teams.size < curTeam + 1) {
-                teams.add(curTeam, ArrayList<String>())
+                teams.add(curTeam, ArrayList())
             }
-            this.teams[curTeam].add(player)
+            teams[curTeam].add(player)
             curTeam += 1
             if (curTeam >= numTeams)
                 curTeam = 0
@@ -35,23 +37,10 @@
         recycler.adapter.notifyDataSetChanged()
     }
 
-//    private fun newTeams() {
-//        var newPlayers = ArrayList<Player>()
-//        var curTeam = 1
-//        val rand = Random()
-//        while (teams.size > 0) {
-//            val player = teams.get(rand.nextInt(teams.size))
-//            teams.remove(player)
-//            player.team = curTeam
-//            newPlayers.add(player)
-//            curTeam += 1
-//            if (curTeam > numTeams)
-//                curTeam = 1
-//        }
-//        teams = newPlayers
-//        sortPlayers(teams)
-//        recycler.adapter.notifyDataSetChanged()
-//    }
+    private fun newTeams() {
+        teams.removeAll(teams)
+        createTeams()
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         if (savedInstanceState != null) {
@@ -77,7 +66,7 @@
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when(item?.itemId) {
             R.id.shuffle -> {
-                teams.shuffle()
+                newTeams()
                 recycler.adapter.notifyDataSetChanged()
                 true
             }
